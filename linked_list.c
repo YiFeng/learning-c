@@ -2,8 +2,8 @@
  *  1. Initialize Linked list from file
  *  2. Print all elements in the linked list
  *  3. Insert 1 element
- *  4. Find whether one value exists in the list or not.
- *  4. Delete all element that equals 5
+ *  4. Find element that equals 5.
+ *  4. Delete element that follows 5
  *  5. Print all elements in the linked list
  */
 
@@ -105,16 +105,36 @@ void free_linked_list(LinkedListNode* head) {
     }
 }
 
-int main(){
-    LinkedListNode *head = initialize_linked_list();
-    print_linked_list(head);
-    // ##############
+// 1. Find first 5, and add 100 after it.
+void task1(LinkedListNode *head){
+    printf("Task 1:\n");
     LinkedListNode *target_node = linked_list_find_first(head, 5);
     LinkedListNode *inserted_node = creat_node(100);
     linked_list_insert(target_node, inserted_node);
     print_linked_list(head);
-    linked_list_delete_next(target_node);
+}
+
+// 2. Find all 5, and add 100 after it.
+void task2(LinkedListNode *head){
+    printf("Task 2:\n");
+    LinkedListNode *new_head = head;
+    while(new_head !=NULL){
+        LinkedListNode *target_node = linked_list_find_first(new_head, 5);
+        if(target_node == NULL){
+            break;
+        }
+        LinkedListNode *inserted_node = creat_node(100);
+        linked_list_insert(target_node, inserted_node);
+        new_head = inserted_node->next;
+    }
     print_linked_list(head);
-    // ##############
-    free_linked_list(head);
+}
+
+// 3. Find all 9 (the head is not 9), and delete them.
+
+int main(){
+    LinkedListNode *head = initialize_linked_list();
+    printf("Original list: ");
+    print_linked_list(head);
+    task2(head);
 }
