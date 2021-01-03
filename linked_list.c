@@ -44,6 +44,9 @@ LinkedListNode* initialize_linked_list(){
 
 
 void print_linked_list(LinkedListNode *head){
+    if (head == NULL) {
+        printf("Empty Head\n");
+    }
     LinkedListNode *current_node = head;
     // while(current_node->next != NULL){
     //     current_node = current_node->next;
@@ -96,6 +99,9 @@ void linked_list_delete_next(LinkedListNode *node) {
 }
 
 void free_linked_list(LinkedListNode* head) {
+    if(head == NULL){
+        return;
+    }
     LinkedListNode *current_node = head;
     LinkedListNode *next_node;
     while(current_node != NULL){
@@ -130,11 +136,64 @@ void task2(LinkedListNode *head){
     print_linked_list(head);
 }
 
+LinkedListNode* remove_head(LinkedListNode *head, int target_num) {
+    while(head != NULL) {
+        if (head->data != target_num) {
+            return head;
+        }
+        head = head->next;
+    }
+    return NULL;
+}
+
+void delete_node(LinkedListNode *prev_node, LinkedListNode *node_to_delete) {
+    prev_node->next = node_to_delete->next;
+    free(node_to_delete);
+}
+
 // 3. Find all 9 (the head is not 9), and delete them.
+void task3(LinkedListNode *head, int target_num) {
+    printf("Task 3:\n");
+    head = remove_head(head, target_num);
+    if (head == NULL) {
+        print_linked_list(head);
+        return;
+    }
+    LinkedListNode *prev_node = head;
+    LinkedListNode *node = prev_node->next;
+    while (node != NULL) {
+        if (node->data == target_num) {
+            delete_node(prev_node, node);
+            node = prev_node->next;
+            continue;
+        }
+        node = node->next;
+        prev_node = prev_node->next;
+    }
+    print_linked_list(head);
+}
+
+void task3_2(LinkedListNode *head, int value){
+    printf("Task 3:\n");
+    LinkedListNode *pre_node = head;
+    while (pre_node->next != NULL){
+        LinkedListNode *current_node = pre_node->next;
+        if(current_node->data == value){
+            linked_list_delete_next(pre_node);
+            continue;
+        }
+        pre_node = current_node;
+    }
+    if (head->data == value) {
+        head = head->next;
+    }
+    print_linked_list(head);
+}
 
 int main(){
     LinkedListNode *head = initialize_linked_list();
-    printf("Original list: ");
+    printf("Original list:\n");
     print_linked_list(head);
-    task2(head);
+    task3_2(head, 9);
+    free_linked_list(head);
 }
