@@ -14,18 +14,54 @@
 struct LinkedListNode {
     int data;
     struct LinkedListNode *next;
-}
+};
 
 typedef struct LinkedListNode LinkedListNode;
 
-void print_linked_list(LinkedListNode *head) {
+LinkedListNode* creat_node(int data){
+    LinkedListNode *node = (LinkedListNode *)calloc(1, sizeof(LinkedListNode));
+    node->data = data;
+    node->next = NULL;
+    return node;
+}
+
+LinkedListNode* initialize_linked_list(){
+    FILE *fpRead=fopen("linklist.txt","r");
+	if(fpRead==NULL){
+		printf("Open fail");
+	}
+    int temporary_data;
+    fscanf(fpRead,"%d ",&temporary_data);
+    LinkedListNode *head = creat_node(temporary_data);
+    LinkedListNode *previous_node = head;
+    while(fscanf(fpRead,"%d ",&temporary_data) != EOF){
+        LinkedListNode *current_node = creat_node(temporary_data);
+        previous_node->next = current_node;
+        previous_node = current_node;
+    }
+    fclose(fpRead);
+    return head;
+}
+
+
+void print_linked_list(LinkedListNode *head){
+    LinkedListNode *current_node = head;
+    // while(current_node->next != NULL){
+    //     current_node = current_node->next;
+    //     printf("%d ", current_node->data);
+    // }
+    while (current_node != NULL) {
+        printf("%d ", current_node->data);
+        current_node = current_node->next;
+    }
+    printf("\n");
 }
 
 void linked_list_insert(LinkedListNode *node, LinkedListNode *new_node) {
 
 }
 
-bool linked_list_find(LinkedListNode *head, int value) {
+void linked_list_find(LinkedListNode *head, int value) {
 
 }
 
@@ -33,17 +69,18 @@ void linked_list_delete_next(LinkedListNode *node) {
 
 }
 
-LinkedListNode* initialize_linked_list() {
-    LinkedListNode *head = calloc(1, sizeof(LinkedListNode));
-    head->next = NULL;
-
-    return head;
-}
-
 void free_linked_list(LinkedListNode* head) {
-
+    LinkedListNode *current_node = head;
+    LinkedListNode *next_node;
+    while(current_node != NULL){
+        next_node = current_node->next;
+        free(current_node);
+        current_node = next_node;
+    }
 }
 
-int main() {
-
+int main(){
+    LinkedListNode *head = initialize_linked_list();
+    print_linked_list(head);
+    free_linked_list(head);
 }
