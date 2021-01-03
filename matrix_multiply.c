@@ -33,7 +33,7 @@ void read_matrix(char file_name[], struct Matrix *m){
             fscanf(fpRead,"%d ",(m->data)[i] + j);
         }
     }
-    int fclose( FILE *fp );
+    fclose(fpRead);
 }
 
 
